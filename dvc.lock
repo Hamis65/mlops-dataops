@@ -10,8 +10,8 @@ stages:
       nfiles: 5
     - path: src/ingest.py
       hash: md5
-      md5: 653f869ae1b004c1ea05eeb3b6bc1c60
-      size: 789
+      md5: d95832bd02afe07ccd2e64c2c0235986
+      size: 840
     outs:
     - path: data/bronze
       hash: md5
@@ -28,8 +28,8 @@ stages:
       nfiles: 1
     - path: src/clean.py
       hash: md5
-      md5: 9e9dde50712325ceae600aa22fa99705
-      size: 1414
+      md5: 65e7688cccf9da94b302cfd0a5951a95
+      size: 1806
     outs:
     - path: data/silver
       hash: md5
@@ -46,11 +46,11 @@ stages:
       nfiles: 1
     - path: src/build_gold.py
       hash: md5
-      md5: 3cb6e93f96a24533de5c291e58583d33
-      size: 1016
+      md5: 86a1fa21ec796d1e5f6693a0318f6ebd
+      size: 1480
     outs:
     - path: data/gold
       hash: md5
-      md5: bf67bb307b2b8bcf6a7b1242bd918cc1.dir
-      size: 92082
+      md5: ac32a9db16dab082319196fd39d59a43.dir
+      size: 152604
       nfiles: 1
