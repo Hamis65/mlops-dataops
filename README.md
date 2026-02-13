@@ -49,6 +49,6 @@ The code has:
 
 - Activate environment:
 .venv\Scripts\activate
-- Run pipeline
+- Run pipeline:
 .dvc repro
 
