@@ -1,0 +1,24 @@
+stages:
+  ingest:
+    cmd: python src/ingest.py
+    deps:
+      - src/ingest.py
+      - data/batches
+    outs:
+      - data/bronze
+
+  clean:
+    cmd: python src/clean.py
+    deps:
+      - src/clean.py
+      - data/bronze
+    outs:
+      - data/silver
+
+  build_gold:
+    cmd: python src/build_gold.py
+    deps:
+      - src/build_gold.py
+      - data/silver
+    outs:
+      - data/gold
