@@ -1,0 +1,56 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python src/ingest.py
+    deps:
+    - path: data/batches
+      hash: md5
+      md5: 0aace30256b962ca5dce6851f74a532f.dir
+      size: 78298
+      nfiles: 5
+    - path: src/ingest.py
+      hash: md5
+      md5: d95832bd02afe07ccd2e64c2c0235986
+      size: 840
+    outs:
+    - path: data/bronze
+      hash: md5
+      md5: b5ba75fc8af1b01f5fce07592813858e.dir
+      size: 78102
+      nfiles: 1
+  clean:
+    cmd: python src/clean.py
+    deps:
+    - path: data/bronze
+      hash: md5
+      md5: b5ba75fc8af1b01f5fce07592813858e.dir
+      size: 78102
+      nfiles: 1
+    - path: src/clean.py
+      hash: md5
+      md5: 65e7688cccf9da94b302cfd0a5951a95
+      size: 1806
+    outs:
+    - path: data/silver
+      hash: md5
+      md5: 338c21649ed9a3893549d6b86cce40f4.dir
+      size: 78102
+      nfiles: 1
+  build_gold:
+    cmd: python src/build_gold.py
+    deps:
+    - path: data/silver
+      hash: md5
+      md5: 338c21649ed9a3893549d6b86cce40f4.dir
+      size: 78102
+      nfiles: 1
+    - path: src/build_gold.py
+      hash: md5
+      md5: 86a1fa21ec796d1e5f6693a0318f6ebd
+      size: 1480
+    outs:
+    - path: data/gold
+      hash: md5
+      md5: ac32a9db16dab082319196fd39d59a43.dir
+      size: 152604
+      nfiles: 1
