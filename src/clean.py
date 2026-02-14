@@ -22,15 +22,22 @@ def validate_time_continuity(df):
 
 
 def validate_ranges(df):
-    """Basic value range checks. Easy to add more."""
-    if not df["humidity"].between(*humidity_range).all():
-        print(f"Warning: Humidity out of expected range ({humidity_range[0]}-{humidity_range[1]})")
+    """Remove rows with values outside expected ranges."""
+    before = len(df)
 
-    if not df["wind_speed"].between(*wind_speed_range).all():
-        print(f"Warning: Wind speed out of expected range ({wind_speed_range[0]}-{wind_speed_range[1]})")
+    df = df[
+        df["humidity"].between(humidity_range[0], humidity_range[1]) &
+        df["wind_speed"].between(wind_speed_range[0], wind_speed_range[1]) &
+        df["meanpressure"].between(pressure_range[0], pressure_range[1])
+    ]
 
-    if not df["meanpressure"].between(*pressure_range).all():
-        print(f"Warning: Pressure out of expected range ({pressure_range[0]}-{pressure_range[1]})")
+    after = len(df)
+    removed = before - after
+
+    if removed > 0:
+        print(f"Removed {removed} rows with invalid values")
+
+    return df
 
 
 def main():
@@ -51,7 +58,7 @@ def main():
 
     # Run validations
     validate_time_continuity(df)
-    validate_ranges(df)
+    df = validate_ranges(df)
 
     # Save silver dataset
     df.to_csv(SILVER_PATH, index=False)
