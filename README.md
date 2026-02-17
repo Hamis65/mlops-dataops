@@ -51,6 +51,4 @@ The code has:
     .venv\Scripts\activate
 - Run pipeline:
     dvc repro
-- Training model:
-    python src\train.py
 
