@@ -1,56 +1,189 @@
 schema: '2.0'
 stages:
   ingest:
-    cmd: python src/ingest.py
+    cmd: python src/ingest.py data/batches data/bronze/train.csv
     deps:
     - path: data/batches
       hash: md5
-      md5: 0aace30256b962ca5dce6851f74a532f.dir
-      size: 78298
-      nfiles: 5
+      md5: afd6cdadcbe05800fc2e9c5392043270.dir
+      size: 18428
+      nfiles: 1
     - path: src/ingest.py
       hash: md5
-      md5: d95832bd02afe07ccd2e64c2c0235986
-      size: 840
+      md5: b455e5fc764ab9e2194964cbce8e830b
+      size: 912
     outs:
     - path: data/bronze
       hash: md5
-      md5: b5ba75fc8af1b01f5fce07592813858e.dir
-      size: 78102
+      md5: df215dfb7ba3edfb22171799dd419ffc.dir
+      size: 18428
       nfiles: 1
   clean:
-    cmd: python src/clean.py
+    cmd: python src/clean.py data/bronze/train.csv data/silver/train.csv
     deps:
     - path: data/bronze
       hash: md5
-      md5: b5ba75fc8af1b01f5fce07592813858e.dir
-      size: 78102
+      md5: df215dfb7ba3edfb22171799dd419ffc.dir
+      size: 18428
       nfiles: 1
     - path: src/clean.py
       hash: md5
-      md5: e1341ac5e12426b5d31f7510008b4b0b
-      size: 1742
+      md5: 4db0f65b633fbd7b3f7439761fd3b9ad
+      size: 1809
     outs:
     - path: data/silver
       hash: md5
-      md5: 8336c9c7d366aae632d2eeed53154bd6.dir
-      size: 77622
+      md5: df215dfb7ba3edfb22171799dd419ffc.dir
+      size: 18428
       nfiles: 1
   build_gold:
-    cmd: python src/build_gold.py
+    cmd: python src/build_gold.py data/silver/train.csv data/gold/train.csv
     deps:
     - path: data/silver
       hash: md5
-      md5: 8336c9c7d366aae632d2eeed53154bd6.dir
-      size: 77622
+      md5: df215dfb7ba3edfb22171799dd419ffc.dir
+      size: 18428
       nfiles: 1
     - path: src/build_gold.py
       hash: md5
-      md5: 86a1fa21ec796d1e5f6693a0318f6ebd
-      size: 1480
+      md5: 98f8507a613b106a943c0313e457aace
+      size: 1551
     outs:
     - path: data/gold
       hash: md5
-      md5: f9a8de3f820bd58a0b9f4400bf34521b.dir
-      size: 151621
+      md5: 4e472810ff091cf5135f68b9ea14631e.dir
+      size: 36751
       nfiles: 1
+  train_model:
+    cmd: python src/train.py data/gold/train.csv
+    deps:
+    - path: data/gold
+      hash: md5
+      md5: 4e472810ff091cf5135f68b9ea14631e.dir
+      size: 36751
+      nfiles: 1
+    - path: src/train.py
+      hash: md5
+      md5: 3f30c0467cd4e6832fb7991c4fcb8683
+      size: 1988
+  ingest_train:
+    cmd: python src/ingest.py data/batches data/bronze/train.csv
+    deps:
+    - path: data/batches
+      hash: md5
+      md5: afd6cdadcbe05800fc2e9c5392043270.dir
+      size: 18428
+      nfiles: 1
+    - path: src/ingest.py
+      hash: md5
+      md5: b455e5fc764ab9e2194964cbce8e830b
+      size: 912
+    outs:
+    - path: data/bronze/train.csv
+      hash: md5
+      md5: 721d2ec0f97db1093e96c17c610e3af9
+      size: 18428
+  clean_train:
+    cmd: python src/clean.py data/bronze/train.csv data/silver/train.csv
+    deps:
+    - path: data/bronze/train.csv
+      hash: md5
+      md5: 721d2ec0f97db1093e96c17c610e3af9
+      size: 18428
+    - path: src/clean.py
+      hash: md5
+      md5: 4db0f65b633fbd7b3f7439761fd3b9ad
+      size: 1809
+    outs:
+    - path: data/silver/train.csv
+      hash: md5
+      md5: 721d2ec0f97db1093e96c17c610e3af9
+      size: 18428
+  build_gold_train:
+    cmd: python src/build_gold.py data/silver/train.csv data/gold/train.csv
+    deps:
+    - path: data/silver/train.csv
+      hash: md5
+      md5: 721d2ec0f97db1093e96c17c610e3af9
+      size: 18428
+    - path: src/build_gold.py
+      hash: md5
+      md5: 98f8507a613b106a943c0313e457aace
+      size: 1551
+    outs:
+    - path: data/gold/train.csv
+      hash: md5
+      md5: a8f9b907af95ba3479caad61ebb8db52
+      size: 36751
+  model_train:
+    cmd: python src/train.py data/gold/train.csv
+    deps:
+    - path: data/gold/train.csv
+      hash: md5
+      md5: a8f9b907af95ba3479caad61ebb8db52
+      size: 36751
+    - path: src/train.py
+      hash: md5
+      md5: 3f30c0467cd4e6832fb7991c4fcb8683
+      size: 1988
+  ingest_test:
+    cmd: python src/ingest.py data/test_data data/bronze/test.csv
+    deps:
+    - path: data/test_data
+      hash: md5
+      md5: 68bfb4229d4fd9d931acae80bb90e823.dir
+      size: 7100
+      nfiles: 1
+    - path: src/ingest.py
+      hash: md5
+      md5: b455e5fc764ab9e2194964cbce8e830b
+      size: 912
+    outs:
+    - path: data/bronze/test.csv
+      hash: md5
+      md5: b27cce4a84ec20f75afe6994e9527c31
+      size: 7099
+  clean_test:
+    cmd: python src/clean.py data/bronze/test.csv data/silver/test.csv
+    deps:
+    - path: data/bronze/test.csv
+      hash: md5
+      md5: b27cce4a84ec20f75afe6994e9527c31
+      size: 7099
+    - path: src/clean.py
+      hash: md5
+      md5: 4db0f65b633fbd7b3f7439761fd3b9ad
+      size: 1809
+    outs:
+    - path: data/silver/test.csv
+      hash: md5
+      md5: e8263e09c92cdb8615fcc4eee407e629
+      size: 7028
+  build_gold_test:
+    cmd: python src/build_gold.py data/silver/test.csv data/gold/test.csv
+    deps:
+    - path: data/silver/test.csv
+      hash: md5
+      md5: e8263e09c92cdb8615fcc4eee407e629
+      size: 7028
+    - path: src/build_gold.py
+      hash: md5
+      md5: 98f8507a613b106a943c0313e457aace
+      size: 1551
+    outs:
+    - path: data/gold/test.csv
+      hash: md5
+      md5: ff1479a94e0ce5652bb61f9e6b717c9f
+      size: 13766
+  model_test:
+    cmd: python src/predict_test.py data/gold/test.csv 
+      data/result/test_predictions.csv
+    deps:
+    - path: data/gold/test.csv
+      hash: md5
+      md5: ff1479a94e0ce5652bb61f9e6b717c9f
+      size: 13766
+    - path: src/predict_test.py
+      hash: md5
+      md5: 38af5a3da8592d524892709b8a053be8
+      size: 1097
