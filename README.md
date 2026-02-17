@@ -48,7 +48,9 @@ The code has:
 ## Running
 
 - Activate environment:
-.venv\Scripts\activate
+    .venv\Scripts\activate
 - Run pipeline:
-dvc repro
+    dvc repro
+- Training model:
+    python src\train.py
 
