@@ -22,3 +22,11 @@ stages:
       - data/silver
     outs:
       - data/gold
+
+  train_model:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - data/gold
+    outs:
+      - models
