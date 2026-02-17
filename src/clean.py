@@ -2,10 +2,14 @@
 # 
 
 import os
+import sys
 import pandas as pd
 
-BRONZE_PATH = "data/bronze/bronze.csv"
-SILVER_PATH = "data/silver/silver.csv"
+#input_path = "data/bronze/bronze.csv"
+#output_path = "data/silver/silver.csv"
+
+input_path = sys.argv[1]
+output_path = sys.argv[2]
 
 # Just some value range tests. Idk what real ranges would have.
 humidity_range = (0, 100)
@@ -44,7 +48,7 @@ def main():
     # Make silver folder
     os.makedirs("data/silver", exist_ok=True)
 
-    df = pd.read_csv(BRONZE_PATH)
+    df = pd.read_csv(input_path)
 
     # Remove duplicate dates
     df = df.drop_duplicates(subset=["date"])
@@ -61,8 +65,8 @@ def main():
     df = validate_ranges(df)
 
     # Save silver dataset
-    df.to_csv(SILVER_PATH, index=False)
-    print(f"Silver dataset saved: {SILVER_PATH} ({len(df)} rows)")
+    df.to_csv(output_path, index=False)
+    print(f"Silver dataset saved: {output_path} ({len(df)} rows)")
 
 
 if __name__ == "__main__":

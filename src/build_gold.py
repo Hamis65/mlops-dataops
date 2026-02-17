@@ -2,17 +2,20 @@
 # 
 
 import os
+import sys
 import pandas as pd
 
-SILVER_PATH = "data/silver/silver.csv"
-GOLD_PATH = "data/gold/gold.csv"
+#input_path = "data/silver/silver.csv"
+#output_path = "data/gold/gold.csv"
 
+input_path = sys.argv[1]
+output_path = sys.argv[2]
 
 def main():
     # Make gold folder
     os.makedirs("data/gold", exist_ok=True)
 
-    df = pd.read_csv(SILVER_PATH)
+    df = pd.read_csv(input_path)
 
     # Sort by date
     df["date"] = pd.to_datetime(df["date"])
@@ -49,8 +52,8 @@ def main():
     ]
 
     # Save gold dataset
-    gold_df.to_csv(GOLD_PATH, index=False)
-    print(f"Gold dataset saved: {GOLD_PATH} ({len(gold_df)} rows)")
+    gold_df.to_csv(output_path, index=False)
+    print(f"Gold dataset saved: {output_path} ({len(gold_df)} rows)")
 
 if __name__ == "__main__":
     main()
