@@ -50,5 +50,5 @@ The code has:
 - Activate environment:
 .venv\Scripts\activate
 - Run pipeline:
-.dvc repro
+dvc repro
 
