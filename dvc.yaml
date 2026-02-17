@@ -1,32 +1,61 @@
 stages:
-  ingest:
-    cmd: python src/ingest.py
+  ingest_train:
+    cmd: python src/ingest.py data/batches data/bronze/train.csv
     deps:
       - src/ingest.py
       - data/batches
     outs:
-      - data/bronze
+      - data/bronze/train.csv
 
-  clean:
-    cmd: python src/clean.py
+  clean_train:
+    cmd: python src/clean.py data/bronze/train.csv data/silver/train.csv
     deps:
       - src/clean.py
-      - data/bronze
+      - data/bronze/train.csv
     outs:
-      - data/silver
+      - data/silver/train.csv
 
-  build_gold:
-    cmd: python src/build_gold.py
+  build_gold_train:
+    cmd: python src/build_gold.py data/silver/train.csv data/gold/train.csv
     deps:
       - src/build_gold.py
-      - data/silver
+      - data/silver/train.csv
     outs:
-      - data/gold
+      - data/gold/train.csv
 
-  train_model:
-    cmd: python src/train.py
+  model_train:
+    cmd: python src/train.py data/gold/train.csv
     deps:
       - src/train.py
-      - data/gold
+      - data/gold/train.csv
+
+
+  ingest_test:
+    cmd: python src/ingest.py data/test_data data/bronze/test.csv
+    deps:
+      - src/ingest.py
+      - data/test_data
     outs:
-      - models
+      - data/bronze/test.csv
+
+  clean_test:
+    cmd: python src/clean.py data/bronze/test.csv data/silver/test.csv
+    deps:
+      - src/clean.py
+      - data/bronze/test.csv
+    outs:
+      - data/silver/test.csv
+
+  build_gold_test:
+    cmd: python src/build_gold.py data/silver/test.csv data/gold/test.csv
+    deps:
+      - src/build_gold.py
+      - data/silver/test.csv
+    outs:
+      - data/gold/test.csv
+
+  model_test:
+    cmd: python src/predict_test.py data/gold/test.csv data/result/test_predictions.csv
+    deps:
+      - src/predict_test.py
+      - data/gold/test.csv
